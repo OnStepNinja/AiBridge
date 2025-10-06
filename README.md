@@ -206,7 +206,7 @@ PUT /api/v1/telescope/0/slewtocoordinatesasync
 
 | GPIO33 State | UI Loaded | Use Case |
 |--------------|-----------|----------|
-| **HIGH** (default) | `index.html` | Standard control panel |
+| **HIGH** (default) | `index.html` | AiBridge Console |
 | **LOW** (grounded) | `index2.html` | Custom user interface |
 
 ### Hardware Connection
