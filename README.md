@@ -1,6 +1,6 @@
 A# AiBridge
 
-# 🔭 AiBridge - AI-Controllable Telescope Interface
+# 🔭 AiBridge - Talk to Your Telescope
 
 [![Version](https://img.shields.io/badge/version-7.9-blue.svg)](https://github.com/OnStepNinja/AiBridge/releases)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
@@ -35,22 +35,6 @@ Simply talk to the AI - **in natural language, via text or voice** - and let the
 
 ## 🎯 How It Works
 
-### Traditional vs. AiBridge
-
-**Traditional telescope control**:
-```
-User → Manual coordinate lookup → Manual entry → Command execution
-      (Complex, error-prone, requires astronomy knowledge)
-```
-
-**AiBridge with Comet Browser**:
-```
-User → Natural conversation → AI reasoning → Automatic execution
-      (Simple, intuitive, no technical knowledge needed)
-```
-
-### Example Conversation
-```
 You: "Point my telescope at Jupiter"
                               ↓
 Comet AI: [Thinks] "Jupiter is currently at RA 05:23:15, DEC +22:47:30"
@@ -60,8 +44,6 @@ Comet AI: [Thinks] "Jupiter is currently at RA 05:23:15, DEC +22:47:30"
           [Executes] GET /api/goto?ra=05:23:15&dec=+22:47:30
                               ↓
           [Responds] "Telescope is slewing to Jupiter."
-```
-
 ---
 
 ## ✨ Key Features
@@ -101,7 +83,7 @@ This release includes:
 
 - ✅ **Compiled firmware** (`AiBridge_v7.9.bin`)
 - ✅ **API specification** (`openapi.json`)(for SPIFFS upload)
-- ✅ **Web UI files** (for SPIFFS upload)
+- ✅ **Sample Web UI files** (for SPIFFS upload)
 
 **Note**: Source code (.ino) is not included in this distribution. The MIT License does not require source code disclosure.
 
@@ -113,27 +95,15 @@ This release includes:
 
 **Minimum Requirements**:
 - ESP32 development board
-- MAX3232 RS-232 level converter
+- serial / RS-232 level converter
 - OnStep-compatible telescope mount
 
-**Wiring**:
-```
-ESP32    MAX3232    OnStep
-TX0  →   RIN    →   RX
-RX0  ←   TOUT   ←   TX
-GND  →   GND    →   GND
-```
 
 ### Step 2: Flash Firmware
 ```bash
 esptool.py --chip esp32 --port COM3 --baud 921600 \
   write_flash 0x10000 firmware/AiBridge_v7.9.bin
 ```
-
-### Step 3: Upload SPIFFS Data
-
-- Use Arduino IDE: Tools → ESP32 Sketch Data Upload
-- Files located in `/data` folder
 
 ### Step 4: Network Setup
 
@@ -168,51 +138,7 @@ AI: [Suggests targets based on current sky conditions]
 
 ## 🤖 AI Integration via Comet Browser
 
-### Real Conversation Examples
 
-#### Example 1: Simple Object Finding
-```
-You: "I want to see the Orion Nebula"
-
-Comet AI: "The Orion Nebula (M42) is a beautiful target! Let me point 
-           your telescope there. It's currently at RA 05:35:17, 
-           DEC -05:23:28."
-         
-           [Calls: GET /api/goto?ra=05:35:17&dec=-05:23:28]
-         
-           "Your telescope is now slewing to M42. It should arrive in 
-           about 25 seconds. This is a great target for visual 
-           observation!"
-```
-
-#### Example 2: Voice Control
-```
-You (speaking): "What's the telescope pointing at right now?"
-
-Comet AI: [Calls: GET /api/status]
-    
-          "Your telescope is currently pointed at RA 12h 30m 15s, 
-          DEC +12° 23' 00". That's in the constellation Virgo, 
-          near the Virgo Cluster of galaxies."
-```
-
-#### Example 3: Complex Reasoning
-```
-You: "I want to photograph a galaxy that's high in the sky"
-
-Comet AI: "Let me find a good target for you. I recommend M81 
-           (Bode's Galaxy). It's currently at altitude 65° - 
-           perfect for imaging with minimal atmospheric distortion.
-         
-           Shall I point your telescope there?"
-
-You: "Yes"
-
-Comet AI: [Calls: GET /api/goto?ra=09:55:33&dec=+69:03:55]
-        
-          "Slewing to M81 now. For astrophotography, I recommend 
-          3-5 minute exposures."
-```
 
 ### Why Comet Browser?
 
