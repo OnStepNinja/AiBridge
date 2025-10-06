@@ -155,17 +155,20 @@ AI: [Suggests targets based on current sky conditions]
 SSID: AiBridge5000_AP
 Password: password
 URL: http://192.168.4.1/
+
+API Spec: http://192.168.4.1/openapi.json
+LX200 Ports: 9999, 9998
+
 ```
 
 ### Station Mode (After WiFi setup)
 ```
 IP: [DHCP assigned]
-Control Panel: http://[your-ip]/
-LX200 Ports: 9999, 9998
-API Spec: http://[your-ip]/openapi.json
-```
+AiBridge Console: http://[your-ip]/
 
----
+API Spec: http://[your-ip]/openapi.json
+LX200 Ports: 9999, 9998
+```
 
 ## 📖 API Examples
 
