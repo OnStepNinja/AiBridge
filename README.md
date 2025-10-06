@@ -42,6 +42,7 @@ Comet AI (Reasons): "I'll send a GOTO command to the telescope"
 ↓  
 Comet AI (Executes): Sends GET request  
 GET /api/goto?ra=05:23:15&dec=+22:47:30
+
 ↓  
 Comet AI (Responds): "Telescope is slewing to Jupiter."
 
