@@ -64,11 +64,11 @@ Comet AI: [Thinks] "Jupiter is currently at RA 05:23:15, DEC +22:47:30"
 
 ### Advanced Features
 - 🎨 **Dual UI System** - Hardware switch (GPIO33) for instant UI switching
-  - **GPIO33 HIGH (default)**: Standard control panel (`index.html`)
+  - **GPIO33 HIGH (default)**: AiBridge Console (Standard control panel,`index.html`)
   - **GPIO33 LOW**: Custom UI (`index2.html`)
 - 📁 **SPIFFS File System** - ~1.3MB storage for user files
 - 💻 **Programmable Interface** - Create custom HTML/JavaScript apps
-- 📤 **Secure File Management** - Hardware-protected file upload system
+- 📤 **Secure File Manager** - Hardware-protected file upload system
   - ⏱️ **30-minute activation window** after boot
   - 🔘 **Hardware button required** for access (10-minute sessions)
   - 💡 **LED indicator** shows access status
