@@ -2,7 +2,7 @@
 
 # 🔭 AiBridge - Talk to Your Telescope
 
-[![Version](https://img.shields.io/badge/version-7.9-blue.svg)](https://github.com/OnStepNinja/AiBridge/releases)
+[![Version](https://img.shields.io/badge/version-7.10-blue.svg)](https://github.com/OnStepNinja/AiBridge/releases)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 **Control your OnStep mount through natural conversation with AI (Comet Browser)**
