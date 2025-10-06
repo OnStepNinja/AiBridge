@@ -233,7 +233,7 @@ Upload custom HTML/JavaScript files to create your own control interface.
 
 **Storage**: ~1.3MB SPIFFS
 
-**Example Custom UI**:
+**Example Custom UI**:(save as index2.html):
 ```html
 <!DOCTYPE html>
 <html>
@@ -257,7 +257,8 @@ Upload custom HTML/JavaScript files to create your own control interface.
 </html>
 ```
 
-**Upload as `index2.html`** and switch GPIO33 to LOW on boot.
+Important: Set GPIO33 to LOW before uploading index2.html to enable File Manager access.
+
 
 ---
 
