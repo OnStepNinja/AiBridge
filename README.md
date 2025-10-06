@@ -2,7 +2,7 @@
 
 # 🔭 AiBridge - Talk to Your Telescope
 
-[![Version](https://img.shields.io/badge/version-7.10-blue.svg)](https://github.com/OnStepNinja/AiBridge/releases)
+[![Version](https://img.shields.io/badge/version-7.10-blue.svg)]
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 **Control your OnStep mount through natural conversation with AI (Comet Browser)**
@@ -83,7 +83,7 @@ Comet AI (Responds): "Telescope is slewing to Jupiter."
 
 This release includes:
 
-- ✅ **Compiled firmware** (`AiBridge_v7.9.bin`)
+- ✅ **Compiled firmware** (`AiBridge_v7.10.bin`)
 - ✅ **API specification** (`openapi.json`)(for SPIFFS upload)
 - ✅ **Sample Web UI files** (for SPIFFS upload)
 
@@ -104,7 +104,7 @@ This release includes:
 ### Step 2: Flash Firmware
 ```bash
 esptool.py --chip esp32 --port COM3 --baud 921600 \
-  write_flash 0x10000 firmware/AiBridge_v7.9.bin
+  write_flash 0x10000 firmware/AiBridge_v7.10.bin
 ```
 
 ### Step 3: Network Setup
