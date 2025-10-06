@@ -33,17 +33,16 @@ Simply talk to the AI - **in natural language, via text or voice** - and let the
 
 ---
 
-## 🎯 How It Works
+🎯 **How It Works**
 
-You: "Point my telescope at Jupiter"
-                              ↓
-Comet AI: [Thinks] "Jupiter is currently at RA 05:23:15, DEC +22:47:30"
-                              ↓
-          [Reasons] "I'll send a GOTO command to the telescope"
-                              ↓
-          [Executes] GET /api/goto?ra=05:23:15&dec=+22:47:30
-                              ↓
-          [Responds] "Telescope is slewing to Jupiter."
+You: "Point my telescope at Jupiter"  
+   ↓  
+Comet AI (Thinks): "Jupiter is currently at RA 05:23:15, DEC +22:47:30"  
+   ↓  
+Comet AI (Reasons): "I'll send a GOTO command to the telescope"  
+   ↓ 
+Comet AI (Responds): "Telescope is slewing to Jupiter."
+
 ---
 
 ## ✨ Key Features
