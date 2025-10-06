@@ -271,7 +271,7 @@ Important: Set GPIO33 to LOW before uploading index2.html to enable File Manager
 
 ### Alternative Access Methods
 If you cannot use Comet Browser, AiBridge still works with:
-- ✅ Web browser (manual control panel)
+- ✅ Web browser (AiBridge Console, manual control panel)
 - ✅ ASCOM/Alpaca compatible software (NINA, Stellarium, etc.)
 - ✅ Direct LX200 protocol (ports 9999, 9998)
 - ✅ REST API (any HTTP client)
