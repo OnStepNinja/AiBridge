@@ -64,6 +64,11 @@ Comet AI (Responds): "Telescope is slewing to Jupiter."
 - ✅ Real-time telescope status monitoring
 - ✅ WiFi AP + Station dual mode (DHCP support)
 
+### Alpaca Device Discovery
+- 🔍 **Auto-detect telescopes** - UDP broadcast on port 32227
+- 📡 **Network scanning** - Finds all Alpaca-compatible devices
+- 🎯 **Device details** - DeviceName, DeviceType, IP:Port
+  
 ### Advanced Features
 - 🎨 **Dual UI System** - Hardware switch (GPIO33) for instant UI switching
   - **GPIO33 HIGH (default)**: AiBridge Console (Standard control panel,`index.html`)
