@@ -276,7 +276,8 @@ If you cannot use Comet Browser, AiBridge still works with:
 - ✅ Direct LX200 protocol (ports 9999, 9998)
 - ✅ REST API (any HTTP client)
 - ✅ Custom web UI (programmable interface)
-
+- ✅ SPIFFS File System — ~1.3MB of storage for user files
+- ✅ Programmable Interface — Create custom applications using HTML/JavaScript
 ---
 
 ## 📝 Current Status
