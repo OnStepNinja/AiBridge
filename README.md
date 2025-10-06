@@ -1,4 +1,4 @@
-A# AiBridge
+# AiBridge
 
 # 🔭 AiBridge - Talk to Your Telescope
 
@@ -105,7 +105,7 @@ esptool.py --chip esp32 --port COM3 --baud 921600 \
   write_flash 0x10000 firmware/AiBridge_v7.9.bin
 ```
 
-### Step 4: Network Setup
+### Step 3: Network Setup
 
 1. **Power on** - ESP32 creates WiFi access point
 2. **Connect to AP**:
@@ -115,7 +115,7 @@ esptool.py --chip esp32 --port COM3 --baud 921600 \
 4. **Configure WiFi**: Use File Manager to set your home network
 5. **Restart** - Now accessible on your home network
 
-### Step 5: AI Setup (Comet Browser)
+### Step 4: AI Setup (Comet Browser)
 
 1. Install Comet Browser from Perplexity AI
 2. Ensure computer is on same network as AiBridge
@@ -125,7 +125,7 @@ esptool.py --chip esp32 --port COM3 --baud 921600 \
     and help me control it"
 ```
 
-### Step 6: Start Observing!
+### Step 5: Start Observing!
 ```
 You: "Show me Saturn"
 AI: [Points telescope at Saturn automatically]
