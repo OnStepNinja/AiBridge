@@ -134,25 +134,17 @@ You: "What else is interesting tonight?"
 AI: [Suggests targets based on current sky conditions]
 ```
 
----
+## 🤖 AI Integration with Comet Browser
 
-## 🤖 AI Integration via Comet Browser
+### Why choose Comet Browser?
+- ✅ Local network access (192.168.x.x addresses)
+- ✅ Direct API calls, no cloud proxy required
+- ✅ Enhanced privacy — no data sent to the cloud
 
-
-
-### Why Comet Browser?
-
-**Technical advantage**:
-- ✅ Can access local network (192.168.x.x addresses)
-- ✅ Direct API calls without cloud proxy
-- ✅ Low latency communication
-- ✅ Works offline (local network only)
-- ✅ Privacy - no data sent to cloud
-
-**Other AI limitations** (as of now):
-- ❌ Claude Desktop: No local network API access
-- ❌ ChatGPT: Requires cloud-accessible endpoints
-- ❌ Google Gemini: Limited local device control
+**Limitations of other AI tools (as of now):**
+- ❌ No local network API access
+- ❌ Require cloud-accessible endpoints
+- ❌ Limited device control
 
 ---
 
