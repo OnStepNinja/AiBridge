@@ -351,7 +351,8 @@ Copyright (c) 2025 Nishioka Sadahiko
 - 💻 **GitHub**: https://github.com/OnStepNinja
 - 🔭 **OnStep Project**: https://onstep.groups.io
 - 📧 **Contact**: nishioka.sst@gmail.com
-
+  
+All product names, trademarks, and registered trademarks are the property of their respective owners.
 ---
 
 ## 🙏 Acknowledgments
