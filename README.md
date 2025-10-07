@@ -161,7 +161,7 @@ AI: [Suggests targets based on current sky conditions]
 ```
 SSID: AiBridge5000_AP
 Password: password
-URL: http://192.168.4.1/
+AiBridge Console: http://192.168.4.1/
 
 API Spec: http://192.168.4.1/openapi.json
 LX200 Ports: 9999, 9998
