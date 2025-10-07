@@ -310,7 +310,6 @@ If you cannot use Comet Browser, AiBridge still works with:
 
 ### Getting Help
 - 📋 **GitHub Issues**: [Report bugs or ask questions](https://github.com/OnStepNinja/AiBridge/issues)
-- 📧 **Email**: nishioka.sst@gmail.com
 - 💬 **Forum**: [OnStep Groups](https://onstep.groups.io)
 
 ### Troubleshooting
