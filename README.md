@@ -94,11 +94,6 @@ This release includes:
 
 **Note**: Source code (.ino) is not included in this distribution. The MIT License does not require source code disclosure.
 
-**Additional Notice**  
-This source code is provided for personal or internal use only.  
-Redistribution, resale, or public disclosure (in whole or in part)  
-is strictly prohibited without written permission from the author.
-
 ---
 
 ## 🚀 Quick Start
