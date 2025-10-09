@@ -80,62 +80,35 @@ You: "Point my telescope at Jupiter"
 - OnStep telescope mount (or LX200-compatible mount)
 - 3.3V TTL serial connection (TX/RX)
 - USB cable for programming
-- Power supply for ESP32 (5V via USB or regulated power)
 
-#### Software
-- Arduino IDE 1.8.x or 2.x
-- ESP32 board support package
-- Required libraries (see Installation)
 
 ---
 
-## 📥 Installation
-
-### 1. Arduino IDE Setup
-
-```bash
-# Add ESP32 board support
-# File → Preferences → Additional Board Manager URLs:
-https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
-
-# Tools → Board → Boards Manager → Search "ESP32" → Install
-```
-
-### 2. Install Required Libraries
-
-Via Arduino Library Manager:
-
-- **ESPAsyncWebServer** by lacamera
-- **AsyncTCP** by dvarrel  
-- **ArduinoJson** by Benoit Blanchon
-
-```bash
-# Tools → Manage Libraries → Search and install each
-```
-
-### 3. Hardware Wiring
-
-```
-OnStep Mount        ESP32
-────────────────────────────
-TX      →           GPIO16 (RX2)
-RX      ←           GPIO17 (TX2)
-GND     ─           GND
-```
-
-⚠️ **Important**: 
-- Use 3.3V TTL serial (not RS232!)
-- Cross TX→RX and RX→TX
-- Common ground required
 
 ### 4. Upload Firmware
 
-```bash
-1. Open AiBridge.ino in Arduino IDE
-2. Tools → Board → ESP32 Dev Module
-3. Tools → Port → Select your ESP32 port
-4. Upload
-```
+How to flash the firmware to ESP32
+
+1. Install Python and esptool:
+   pip install esptool
+
+2. Connect the ESP32 board to your PC via USB. 
+   Check the COM port number (e.g., COM3).
+
+3. Place the following three files in the same folder:
+   - AiBridge_v7_10.ino.bootloader.bin
+   - AiBridge_v7_10.ino.partitions.bin
+   - AiBridge_v7_10.ino.bin
+
+4. Open Command Prompt, move to the folder, and run:
+
+   esptool --chip esp32 --port COM3 --baud 921600 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size detect 0x1000 AiBridge_v7_10.ino.bootloader.bin 0x8000 AiBridge_v7_10.ino.partitions.bin 0x10000 AiBridge_v7_10.ino.bin
+
+*Replace "COM3" with your actual port number.
+
+5. Wait for the process to complete. 
+
+---
 
 ### 5. Initial Configuration
 
