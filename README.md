@@ -67,7 +67,7 @@ You: "Point my telescope at Jupiter"
 - 🔌 **LX200 Serial** - Compatible with OnStep and other mounts
 - 🌐 **REST API** - Full telescope control via HTTP
 - 📡 **WiFi Ready** - AP mode and Station mode support
-- 🔓 **ASCOM Alpaca** - Standard astronomy protocol (coming soon)
+- 🔓 **ASCOM Alpaca** - Standard astronomy protocol
 
 ---
 
@@ -125,6 +125,37 @@ How to flash the firmware to ESP32
 - AP Mode: http://192.168.4.1
 - STA Mode: Your IP address (DHCP)
 
+
+### Hardware Connections
+- **OnStep Serial**: ESP32 default UART0 (TX: GPIO1, RX: GPIO3)
+- **Debug Serial**: GPIO16 (RX), GPIO17 (TX) - Optional
+- **File Manager Enable**: GPIO39 (with pull-up resistor)
+- **Custom UI Select**: GPIO33 (internal pull-up)
+- **LED Indicator**: GPIO25
+
+
+## 🔒 Security Features
+
+### File Manager Protection
+- Hardware button (GPIO39) required for access
+- 30-minute window after boot
+- 10-minute sessions when activated
+- LED indicator shows access status
+- Automatic lockout after 30 minutes
+
+
+### Custom UI Support
+- GPIO33 LOW at boot: Load custom index2.html
+- GPIO33 HIGH (default): Standard AiBridge Console
+
+
+### WiFi Configuration Steps
+1. Enable File Manager (press GPIO39 button within 30min of boot)
+2. Navigate to File Manager section
+3. Enter SSID and Password in WiFi Configuration
+4. Click "Save Config"
+5. Restart ESP32 to apply changes
+
 ---
 
 ## 🎮 Usage
@@ -141,7 +172,7 @@ Open browser → `http://[IP-ADDRESS]`
 
 **Setup Comet Browser**:
 1. Open Comet Browser by Perplexity AI
-2. Tell AI your IP: "My telescope is at http://[IP-ADDRESS]/api/spec"
+2. Tell AI your IP: "My telescope is at http://[IP-ADDRESS]/openapi.json   or  /api/spec"
 3. Start commanding naturally!
 
 
