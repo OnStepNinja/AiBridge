@@ -267,6 +267,8 @@ Made with ❤️ for the astronomy community
 
 ---
 
-## 📦 ファームウェア
-
+## 📦 Firmware
+The firmware files are located in the firmware folder. Free to use under MIT License.
 ファームウェアは firmware フォルダ内にあります。MITライセンスの元、自由に利用できます。
+まだまだプロトタイプですが、お試しください。ご意見、ご希望などありますと大変参考になります。
+
