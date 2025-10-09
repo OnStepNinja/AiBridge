@@ -131,20 +131,37 @@ How to flash the firmware to ESP32
 
 ### Web Interface
 
-Open browser → `http://[ESP32-IP-ADDRESS]`
+Open browser → `http://[IP-ADDRESS]`
 
 **Manual Control Mode**:
 - Direct telescope control via web UI
-- Slew to coordinates
-- Park, home, tracking controls
 - Real-time status display
 
 ### AI Control (Comet Browser)
 
 **Setup Comet Browser**:
 1. Open Comet Browser by Perplexity AI
-2. Tell AI your ESP32 IP: "My telescope is at http://192.168.1.100"
+2. Tell AI your IP: "My telescope is at http://[IP-ADDRESS]/api/spec"
 3. Start commanding naturally!
+
+
+**Comet Browser Features
+
+AI Agent-Based Browser
+The browser hosts a constantly present AI assistant that can autonomously perform direct operations on webpages (such as clicking, inputting, navigating, summarizing, etc.) based on user instructions.
+
+Real-time Screen Recognition and Automated Actions
+It recognizes the structure and content of the displayed webpage in real time, allowing for the automation of actions like button clicks, form submissions, and social media posting.
+
+Agentic Search
+Beyond simple information retrieval, it can fully complete complex, multi-service tasks such as "plan a trip" or "create a summary table."
+
+Hybrid Operation
+Users can switch between the AI's automated control and their own manual control. The target of the AI's operation is highlighted on the screen while the AI is in control.
+
+External Integration and Voice Control Support
+Standard features include integration with various services like Gmail and Calendar, as well as support for voice assistants.
+
 
 **Example Voice Commands**:
 
