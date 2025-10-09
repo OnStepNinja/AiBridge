@@ -141,17 +141,16 @@ GND     ─           GND
 
 **First Boot (AP Mode)**
 
-1. ESP32 creates WiFi network: `AiBridge-XXXX`
-2. Connect to it (password: `12345678`)
+1. ESP32 creates WiFi network: `AiBridge5000_AP`
+2. Connect to it (password: `password`)
 3. Open browser → `http://192.168.4.1`
-4. Configure your WiFi credentials
+4. Enter your WiFi information and configure it from the File Manager.
 5. ESP32 reboots and connects to your network
 
-**Find Your IP Address**
+**The AiBridge Console displays two IP addresses**
 
-- Check your router's DHCP table
-- Or use serial monitor (115200 baud)
-- Or use network scanner app
+- AP Mode: http://192.168.4.1
+- STA Mode: Your IP address (DHCP)
 
 ---
 
