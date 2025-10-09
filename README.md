@@ -85,7 +85,7 @@ You: "Point my telescope at Jupiter"
 ---
 
 
-### 4. Upload Firmware
+### Upload Firmware
 
 How to flash the firmware to ESP32
 
@@ -110,7 +110,7 @@ How to flash the firmware to ESP32
 
 ---
 
-### 5. Initial Configuration
+### Initial Configuration
 
 **First Boot (AP Mode)**
 
@@ -156,6 +156,19 @@ How to flash the firmware to ESP32
 4. Click "Save Config"
 5. Restart ESP32 to apply changes
 
+
+### Network Ports
+- **HTTP Web Interface**: Port 80
+- **LX200 Command Ports**: 9999, 9998 (TCP)
+- **Alpaca Discovery**: UDP 32227
+
+
+### Storage (SPIFFS)
+- **Capacity**: ~1.3MB for user files
+- **Supported Files**: HTML, JavaScript, CSS, JSON
+- **Custom Web Apps**: Upload your own control interface
+
+
 ---
 
 ## 🎮 Usage
@@ -175,23 +188,11 @@ Open browser → `http://[IP-ADDRESS]`
 2. Tell AI your IP: "My telescope is at http://[IP-ADDRESS]/openapi.json   or  /api/spec"
 3. Start commanding naturally!
 
-
-**Comet Browser Features
-
-AI Agent-Based Browser
-The browser hosts a constantly present AI assistant that can autonomously perform direct operations on webpages (such as clicking, inputting, navigating, summarizing, etc.) based on user instructions.
-
-Real-time Screen Recognition and Automated Actions
-It recognizes the structure and content of the displayed webpage in real time, allowing for the automation of actions like button clicks, form submissions, and social media posting.
-
-Agentic Search
-Beyond simple information retrieval, it can fully complete complex, multi-service tasks such as "plan a trip" or "create a summary table."
-
-Hybrid Operation
-Users can switch between the AI's automated control and their own manual control. The target of the AI's operation is highlighted on the screen while the AI is in control.
-
-External Integration and Voice Control Support
-Standard features include integration with various services like Gmail and Calendar, as well as support for voice assistants.
+**Comet Browser can:**
+- Autonomously control web interfaces
+- Execute complex multi-step tasks
+- Integrate with local network devices
+- Support voice commands
 
 
 **Example Voice Commands**:
