@@ -224,6 +224,15 @@ If you find AiBridge useful, please consider:
 
 Your support helps continue development! 🙏
 
+### :speech_balloon: Discussionsタブのご案内 / Join our Discussions!
+
+
+**ご質問・ご意見・提案は [Discussions](https://github.com/OnStepNinja/AiBridge/discussions) タブで受け付けています。どなたでもお気軽に投稿してください！**
+
+You can ask questions, make suggestions, and join our community on the [Discussions](https://github.com/OnStepNinja/AiBridge/discussions) tab. Everyone is welcome!
+
+[![Discussionsで話しましょう / Join our Discussions](https://img.shields.io/badge/Discussions-参加する%20/%20Join%20Us-blue?logo=github)](https://github.com/OnStepNinja/AiBridge/discussions)
+
 ---
 
 ## 📜 License
