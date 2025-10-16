@@ -213,6 +213,14 @@ Open browser → `http://[IP-ADDRESS]`
 
 ---
 
+## Info & Updates
+
+- 2025-10-16 AiBridge Additional Information  
+  We have discovered that GPIO39 (FILE_MANAGER_ENABLE_PIN) shown in the schematic does **not have an internal pull-up resistor enabled**.  
+  **Please connect an external pull-up resistor to this pin.**
+
+---
+
 ## 💖 Support This Project
 
 If you find AiBridge useful, please consider:
@@ -223,6 +231,7 @@ If you find AiBridge useful, please consider:
 - 📢 **Share** with the astronomy community
 
 Your support helps continue development! 🙏
+
 
 ### :speech_balloon: Discussionsタブのご案内 / Join our Discussions!
 
