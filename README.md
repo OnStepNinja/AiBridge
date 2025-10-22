@@ -215,6 +215,16 @@ Open browser → `http://[IP-ADDRESS]`
 
 ## Info & Updates
 
+- 2025-10-22 ### v7.11 Version Update Contents
+- PHD2 Support - Full autoguiding compatibility
+- Alpaca Switch Feature - 4-channel relay control (ON/OFF) via GPIO27/14/12/13
+- ObservingConditions Implementation - DHT22 temperature/humidity sensor support (GPIO5), 60-second updates
+- Location Name Feature - Location Name added to WiFi settings, automatic Ai- prefix for improved multi-AiBridge identification
+- Alpaca Device Expansion - 3-device support (Telescope/ObservingConditions/Switch)
+- Full Backward Compatibility - Safe to upgrade with confidence
+- Practical Functionality - Ready to use in actual observations
+
+
 - 2025-10-16 AiBridge Additional Information  
   We have discovered that GPIO39 (FILE_MANAGER_ENABLE_PIN) shown in the schematic does **not have an internal pull-up resistor enabled**.  
   **Please connect an external pull-up resistor to this pin.**
