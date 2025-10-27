@@ -215,7 +215,17 @@ Open browser → `http://[IP-ADDRESS]`
 
 ## Info & Updates
 
-- 2025-10-22 ### v7.11 Version Update Contents
+2025-10-27 AiBridge_ESP32_C3 v7.11 Public Release 🚀
+We are excited to announce the public release of the new AiBridge_ESP32_C3 v7.11 firmware version.
+
+Core Architectural Change: The CPU has been switched from the standard ESP32 to the cost-effective and compact ESP32-C3. This means the internal core architecture is now RISC-V instead of Xtensa.
+
+High Compatibility: The operation methods, source code, and overall usage are largely compatible with the original ESP32 firmware, allowing for a smooth transition and minimal changes to existing setups.
+
+Important Notice for Japan: This AiBridge_ESP32_C3 board is currently not certified with the Giteki Mark (Technical Conformity Mark). Therefore, domestic use in Japan is prohibited. We are actively exploring an alternative version using the ESP32-PICO to ensure compliance for our Japanese users.
+
+
+2025-10-22 ### v7.11 Version Update Contents
 - PHD2 Support - Full autoguiding compatibility
 - Alpaca Switch Feature - 4-channel relay control (ON/OFF) via GPIO27/14/12/13
 - ObservingConditions Implementation - DHT22 temperature/humidity sensor support (GPIO5), 60-second updates
@@ -225,7 +235,7 @@ Open browser → `http://[IP-ADDRESS]`
 - Practical Functionality - Ready to use in actual observations
 
 
-- 2025-10-16 AiBridge Additional Information  
+2025-10-16 AiBridge Additional Information  
   We have discovered that GPIO39 (FILE_MANAGER_ENABLE_PIN) shown in the schematic does **not have an internal pull-up resistor enabled**.  
   **Please connect an external pull-up resistor to this pin.**
 
