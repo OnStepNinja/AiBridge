@@ -215,6 +215,17 @@ Open browser → `http://[IP-ADDRESS]`
 
 ## Info & Updates
 
+**2025-10-30 AiBridge v7.12 - ASCOM Alpaca Protocol Compliance Update** 🎯  
+Major improvements to ASCOM/Alpaca compatibility based on official protocol validation:
+* **Zero Errors Achievement** - Passed ASCOM Check Alpaca Protocol with 0 errors (previously 1 error, 95 issues)
+* **Required Endpoints Implementation** - Added InterfaceVersion, Name, Description, DriverInfo, DriverVersion, SupportedActions
+* **ClientTransactionID Fix** - Full case-insensitive parameter handling per ASCOM standard
+* **Error Handling Enhancement** - Proper Alpaca error responses (ErrorNumber 1024) for unimplemented methods
+* **AtPark Property** - Basic implementation for protocol compliance
+* **Improved Compatibility** - Better integration with NINA, Stellarium, and other ASCOM-compatible software
+* **Stable Release** - Production-ready with enhanced reliability
+
+
 2025-10-27 AiBridge_ESP32_C3 v7.11 Public Release 🚀
 We are excited to announce the public release of the new AiBridge_ESP32_C3 v7.11 firmware version.
 
