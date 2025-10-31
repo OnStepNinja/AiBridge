@@ -215,6 +215,12 @@ Open browser → `http://[IP-ADDRESS]`
 
 ## Info & Updates
 
+2025-10-31 AiBridge v7.12.1 - Custom UI Restoration & Version Display 🚀
+Critical fix restoring Custom UI functionality. Custom HTML pages (index2.html, etc.) now load properly again.
+Control panel now shows version number automatically in the title (e.g. "AiBridge Console v7.12.1").
+Users of v7.12 should upgrade immediately to avoid UI errors.
+
+
 **2025-10-30 AiBridge v7.12 - ASCOM Alpaca Protocol Compliance Update** 🎯  
 Major improvements to ASCOM/Alpaca compatibility based on official protocol validation:
 * **Zero Errors Achievement** - Passed ASCOM Check Alpaca Protocol with 0 errors (previously 1 error, 95 issues)
