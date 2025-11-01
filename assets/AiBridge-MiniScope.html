@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AiBridge-MiniScope</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0e27;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        header {
+            background: #1a1f3a;
+            padding: 15px 20px;
+            border-bottom: 2px solid #2a3150;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .status.connected {
+            background: #10b981;
+        }
+        .status.disconnected {
+            background: #ef4444;
+        }
+        input {
+            padding: 8px 12px;
+            border: 1px solid #4a5568;
+            background: #2d3748;
+            color: white;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            padding: 8px 16px;
+            background: #3b82f6;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #2563eb;
+        }
+        label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        canvas {
+            border: 2px solid #2a3150;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            max-width: 100%;
+            max-height: 100%;
+        }
+        footer {
+            background: #1a1f3a;
+            padding: 12px 20px;
+            border-top: 2px solid #2a3150;
+            font-size: 13px;
+            color: #a0aec0;
+        }
+        .legend {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🔭 AiBridge-MiniScope</h1>
+        <div class="controls">
+            <span class="status disconnected" id="status">Connecting...</span>
+            <label>
+                API URL:
+                <input type="text" id="apiUrl" value="http://192.168.4.1" style="width: 200px;">
+            </label>
+            <button onclick="updatePosition()">Manual Update</button>
+            <label>
+                <input type="checkbox" id="autoRefresh" checked>
+                Auto Refresh (1s)
+            </label>
+        </div>
+        <div class="controls" style="margin-top: 10px;">
+            <span id="selectedCoords" style="color: #60a5fa; font-weight: bold;">Click on chart to select target</span>
+            <button id="gotoButton" onclick="executeGoto()" disabled style="background: #6b7280; cursor: not-allowed;">GOTO</button>
+        </div>
+    </header>
+    
+    <main>
+        <canvas id="starChart" width="1400" height="700"></canvas>
+    </main>
+    
+    <footer>
+        <div class="legend">
+            <div class="legend-item">
+                <span style="color: #ef4444; font-size: 20px; font-weight: bold;">✕</span>
+                <span>Telescope Position</span>
+            </div>
+            <div class="legend-item">
+                <span style="display: inline-block; width: 20px; height: 20px; border: 3px solid #60a5fa; border-radius: 50%;"></span>
+                <span>Selected Target</span>
+            </div>
+            <div class="legend-item">
+                <span style="display: inline-block; width: 12px; height: 12px; background: white; border-radius: 50%;"></span>
+                <span>Stars (size by magnitude)</span>
+            </div>
+            <div class="legend-item">
+                <span style="display: inline-block; width: 8px; height: 8px; background: #10b981; border-radius: 50%;"></span>
+                <span>Messier Objects</span>
+            </div>
+            <div class="legend-item">
+                <span style="display: inline-block; width: 30px; height: 2px; background: #4a5568;"></span>
+                <span>RA/DEC Grid</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        var canvas = document.getElementById('starChart');
+        var ctx = canvas.getContext('2d');
+        var statusEl = document.getElementById('status');
+        var apiUrlInput = document.getElementById('apiUrl');
+        var autoRefreshCheckbox = document.getElementById('autoRefresh');
+        var selectedCoordsEl = document.getElementById('selectedCoords');
+        var gotoButton = document.getElementById('gotoButton');
+
+        var telescopePos = { ra: null, dec: null };
+        var selectedPos = { ra: null, dec: null };
+        var updateInterval = null;
+
+        // Stars up to magnitude 2.0
+        var stars = [
+            { name: 'Sirius', ra: 6.75, dec: -16.72, mag: -1.46 },
+            { name: 'Canopus', ra: 6.40, dec: -52.70, mag: -0.72 },
+            { name: 'Arcturus', ra: 14.26, dec: 19.18, mag: -0.05 },
+            { name: 'Rigil Kentaurus', ra: 14.66, dec: -60.83, mag: -0.01 },
+            { name: 'Vega', ra: 18.62, dec: 38.78, mag: 0.03 },
+            { name: 'Capella', ra: 5.28, dec: 45.99, mag: 0.08 },
+            { name: 'Rigel', ra: 5.24, dec: -8.20, mag: 0.13 },
+            { name: 'Procyon', ra: 7.66, dec: 5.22, mag: 0.38 },
+            { name: 'Achernar', ra: 1.63, dec: -57.24, mag: 0.46 },
+            { name: 'Betelgeuse', ra: 5.92, dec: 7.41, mag: 0.50 },
+            { name: 'Hadar', ra: 14.06, dec: -60.37, mag: 0.61 },
+            { name: 'Altair', ra: 19.85, dec: 8.87, mag: 0.77 },
+            { name: 'Acrux', ra: 12.44, dec: -63.10, mag: 0.77 },
+            { name: 'Aldebaran', ra: 4.60, dec: 16.51, mag: 0.85 },
+            { name: 'Antares', ra: 16.49, dec: -26.43, mag: 0.96 },
+            { name: 'Spica', ra: 13.42, dec: -11.16, mag: 0.98 },
+            { name: 'Pollux', ra: 7.76, dec: 28.03, mag: 1.14 },
+            { name: 'Fomalhaut', ra: 22.96, dec: -29.62, mag: 1.16 },
+            { name: 'Deneb', ra: 20.69, dec: 45.28, mag: 1.25 },
+            { name: 'Mimosa', ra: 12.79, dec: -59.69, mag: 1.25 },
+            { name: 'Regulus', ra: 10.14, dec: 11.97, mag: 1.35 },
+            { name: 'Adhara', ra: 6.98, dec: -28.97, mag: 1.50 },
+            { name: 'Castor', ra: 7.58, dec: 31.89, mag: 1.58 },
+            { name: 'Gacrux', ra: 12.52, dec: -57.11, mag: 1.63 },
+            { name: 'Shaula', ra: 17.56, dec: -37.10, mag: 1.63 },
+            { name: 'Bellatrix', ra: 5.42, dec: 6.35, mag: 1.64 },
+            { name: 'Elnath', ra: 5.44, dec: 28.61, mag: 1.65 },
+            { name: 'Miaplacidus', ra: 9.22, dec: -69.72, mag: 1.68 },
+            { name: 'Alnilam', ra: 5.60, dec: -1.20, mag: 1.69 },
+            { name: 'Al Nair', ra: 22.14, dec: -46.96, mag: 1.74 },
+            { name: 'Alnitak', ra: 5.68, dec: -1.94, mag: 1.77 },
+            { name: 'Alioth', ra: 12.90, dec: 55.96, mag: 1.77 },
+            { name: 'Dubhe', ra: 11.06, dec: 61.75, mag: 1.79 },
+            { name: 'Mirfak', ra: 3.41, dec: 49.86, mag: 1.80 },
+            { name: 'Wezen', ra: 7.14, dec: -26.39, mag: 1.84 },
+            { name: 'Kaus Australis', ra: 18.40, dec: -34.38, mag: 1.85 },
+            { name: 'Sargas', ra: 17.62, dec: -42.99, mag: 1.87 },
+            { name: 'Avior', ra: 8.38, dec: -59.51, mag: 1.86 },
+            { name: 'Alkaid', ra: 13.79, dec: 49.31, mag: 1.86 },
+            { name: 'Menkalinan', ra: 6.00, dec: 44.95, mag: 1.90 },
+            { name: 'Atria', ra: 16.81, dec: -69.03, mag: 1.92 },
+            { name: 'Alhena', ra: 6.63, dec: 16.40, mag: 1.93 },
+            { name: 'Peacock', ra: 20.43, dec: -56.74, mag: 1.94 },
+            { name: 'Polaris', ra: 2.53, dec: 89.26, mag: 1.98 },
+            { name: 'Mirzam', ra: 6.38, dec: -17.96, mag: 1.98 },
+            { name: 'Alphard', ra: 9.46, dec: -8.66, mag: 1.98 },
+            { name: 'Hamal', ra: 2.12, dec: 23.46, mag: 2.00 },
+            { name: 'Algieba', ra: 10.33, dec: 19.84, mag: 2.08 },
+            { name: 'Diphda', ra: 0.73, dec: -17.99, mag: 2.04 },
+            { name: 'Nunki', ra: 18.92, dec: -26.30, mag: 2.02 },
+            { name: 'Menkent', ra: 14.11, dec: -36.37, mag: 2.06 },
+            { name: 'Alpheratz', ra: 0.14, dec: 29.09, mag: 2.06 },
+            { name: 'Saiph', ra: 5.80, dec: -9.67, mag: 2.09 },
+            { name: 'Algol', ra: 3.14, dec: 40.96, mag: 2.12 },
+            { name: 'Denebola', ra: 11.82, dec: 14.57, mag: 2.14 },
+            { name: 'Kochab', ra: 14.85, dec: 74.16, mag: 2.08 },
+            { name: 'Sadr', ra: 20.37, dec: 40.26, mag: 2.20 },
+            { name: 'Naos', ra: 8.06, dec: -40.00, mag: 2.25 },
+            { name: 'Aspidiske', ra: 9.29, dec: -59.28, mag: 2.21 },
+            { name: 'Rasalhague', ra: 17.58, dec: 12.56, mag: 2.08 },
+            { name: 'Eltanin', ra: 17.94, dec: 51.49, mag: 2.23 },
+            { name: 'Schedar', ra: 0.68, dec: 56.54, mag: 2.24 },
+            { name: 'Mintaka', ra: 5.53, dec: -0.30, mag: 2.23 },
+            { name: 'Caph', ra: 0.15, dec: 59.15, mag: 2.27 },
+            { name: 'Izar', ra: 14.75, dec: 27.07, mag: 2.37 },
+            { name: 'Dschubba', ra: 16.00, dec: -22.62, mag: 2.29 },
+            { name: 'Enif', ra: 21.74, dec: 9.88, mag: 2.39 },
+            { name: 'Scheat', ra: 23.06, dec: 28.08, mag: 2.42 },
+            { name: 'Sabik', ra: 17.17, dec: -15.72, mag: 2.43 },
+            { name: 'Phecda', ra: 11.90, dec: 53.69, mag: 2.44 },
+            { name: 'Aludra', ra: 7.40, dec: -29.30, mag: 2.45 }
+        ];
+
+        // All Messier Objects (M1-M110)
+        var messierObjects = [
+            { name: 'M1', ra: 5.58, dec: 22.02, type: 'SNR' },
+            { name: 'M2', ra: 21.56, dec: -0.82, type: 'GC' },
+            { name: 'M3', ra: 13.70, dec: 28.38, type: 'GC' },
+            { name: 'M4', ra: 16.39, dec: -26.53, type: 'GC' },
+            { name: 'M5', ra: 15.31, dec: 2.08, type: 'GC' },
+            { name: 'M6', ra: 17.67, dec: -32.22, type: 'OC' },
+            { name: 'M7', ra: 17.90, dec: -34.82, type: 'OC' },
+            { name: 'M8', ra: 18.06, dec: -24.38, type: 'NEB' },
+            { name: 'M9', ra: 17.32, dec: -18.52, type: 'GC' },
+            { name: 'M10', ra: 16.95, dec: -4.10, type: 'GC' },
+            { name: 'M11', ra: 18.85, dec: -6.27, type: 'OC' },
+            { name: 'M12', ra: 16.79, dec: -1.95, type: 'GC' },
+            { name: 'M13', ra: 16.69, dec: 36.46, type: 'GC' },
+            { name: 'M14', ra: 17.63, dec: -3.25, type: 'GC' },
+            { name: 'M15', ra: 21.50, dec: 12.17, type: 'GC' },
+            { name: 'M16', ra: 18.31, dec: -13.80, type: 'OC' },
+            { name: 'M17', ra: 18.34, dec: -16.18, type: 'NEB' },
+            { name: 'M18', ra: 18.33, dec: -17.13, type: 'OC' },
+            { name: 'M19', ra: 17.05, dec: -26.27, type: 'GC' },
+            { name: 'M20', ra: 18.03, dec: -23.03, type: 'NEB' },
+            { name: 'M21', ra: 18.08, dec: -22.50, type: 'OC' },
+            { name: 'M22', ra: 18.61, dec: -23.90, type: 'GC' },
+            { name: 'M23', ra: 17.95, dec: -19.00, type: 'OC' },
+            { name: 'M24', ra: 18.28, dec: -18.50, type: 'OC' },
+            { name: 'M25', ra: 18.53, dec: -19.25, type: 'OC' },
+            { name: 'M26', ra: 18.76, dec: -9.40, type: 'OC' },
+            { name: 'M27', ra: 19.99, dec: 22.72, type: 'PN' },
+            { name: 'M28', ra: 18.40, dec: -24.87, type: 'GC' },
+            { name: 'M29', ra: 20.40, dec: 38.53, type: 'OC' },
+            { name: 'M30', ra: 21.67, dec: -23.18, type: 'GC' },
+            { name: 'M31', ra: 0.71, dec: 41.27, type: 'GAL' },
+            { name: 'M32', ra: 0.71, dec: 40.87, type: 'GAL' },
+            { name: 'M33', ra: 1.56, dec: 30.66, type: 'GAL' },
+            { name: 'M34', ra: 2.70, dec: 42.78, type: 'OC' },
+            { name: 'M35', ra: 6.15, dec: 24.33, type: 'OC' },
+            { name: 'M36', ra: 5.60, dec: 34.13, type: 'OC' },
+            { name: 'M37', ra: 5.87, dec: 32.55, type: 'OC' },
+            { name: 'M38', ra: 5.48, dec: 35.83, type: 'OC' },
+            { name: 'M39', ra: 21.54, dec: 48.43, type: 'OC' },
+            { name: 'M40', ra: 12.37, dec: 58.08, type: 'DS' },
+            { name: 'M41', ra: 6.77, dec: -20.73, type: 'OC' },
+            { name: 'M42', ra: 5.59, dec: -5.39, type: 'NEB' },
+            { name: 'M43', ra: 5.59, dec: -5.27, type: 'NEB' },
+            { name: 'M44', ra: 8.67, dec: 19.98, type: 'OC' },
+            { name: 'M45', ra: 3.79, dec: 24.12, type: 'OC' },
+            { name: 'M46', ra: 7.69, dec: -14.82, type: 'OC' },
+            { name: 'M47', ra: 7.61, dec: -14.50, type: 'OC' },
+            { name: 'M48', ra: 8.23, dec: -5.75, type: 'OC' },
+            { name: 'M49', ra: 12.50, dec: 8.00, type: 'GAL' },
+            { name: 'M50', ra: 7.05, dec: -8.33, type: 'OC' },
+            { name: 'M51', ra: 13.50, dec: 47.20, type: 'GAL' },
+            { name: 'M52', ra: 23.40, dec: 61.59, type: 'OC' },
+            { name: 'M53', ra: 13.21, dec: 18.17, type: 'GC' },
+            { name: 'M54', ra: 18.92, dec: -30.48, type: 'GC' },
+            { name: 'M55', ra: 19.67, dec: -30.97, type: 'GC' },
+            { name: 'M56', ra: 19.28, dec: 30.18, type: 'GC' },
+            { name: 'M57', ra: 18.89, dec: 33.03, type: 'PN' },
+            { name: 'M58', ra: 12.62, dec: 11.82, type: 'GAL' },
+            { name: 'M59', ra: 12.70, dec: 11.65, type: 'GAL' },
+            { name: 'M60', ra: 12.73, dec: 11.55, type: 'GAL' },
+            { name: 'M61', ra: 12.37, dec: 4.47, type: 'GAL' },
+            { name: 'M62', ra: 17.02, dec: -30.12, type: 'GC' },
+            { name: 'M63', ra: 13.26, dec: 42.03, type: 'GAL' },
+            { name: 'M64', ra: 12.95, dec: 21.68, type: 'GAL' },
+            { name: 'M65', ra: 11.31, dec: 13.09, type: 'GAL' },
+            { name: 'M66', ra: 11.33, dec: 12.99, type: 'GAL' },
+            { name: 'M67', ra: 8.85, dec: 11.82, type: 'OC' },
+            { name: 'M68', ra: 12.66, dec: -26.75, type: 'GC' },
+            { name: 'M69', ra: 18.52, dec: -32.35, type: 'GC' },
+            { name: 'M70', ra: 18.72, dec: -32.30, type: 'GC' },
+            { name: 'M71', ra: 19.90, dec: 18.78, type: 'GC' },
+            { name: 'M72', ra: 20.89, dec: -12.54, type: 'GC' },
+            { name: 'M73', ra: 20.99, dec: -12.63, type: 'AS' },
+            { name: 'M74', ra: 1.61, dec: 15.78, type: 'GAL' },
+            { name: 'M75', ra: 20.10, dec: -21.92, type: 'GC' },
+            { name: 'M76', ra: 1.71, dec: 51.58, type: 'PN' },
+            { name: 'M77', ra: 2.71, dec: -0.01, type: 'GAL' },
+            { name: 'M78', ra: 5.77, dec: 0.08, type: 'NEB' },
+            { name: 'M79', ra: 5.40, dec: -24.52, type: 'GC' },
+            { name: 'M80', ra: 16.28, dec: -22.97, type: 'GC' },
+            { name: 'M81', ra: 9.93, dec: 69.07, type: 'GAL' },
+            { name: 'M82', ra: 9.93, dec: 69.68, type: 'GAL' },
+            { name: 'M83', ra: 13.62, dec: -29.87, type: 'GAL' },
+            { name: 'M84', ra: 12.42, dec: 12.88, type: 'GAL' },
+            { name: 'M85', ra: 12.43, dec: 18.19, type: 'GAL' },
+            { name: 'M86', ra: 12.43, dec: 12.95, type: 'GAL' },
+            { name: 'M87', ra: 12.51, dec: 12.39, type: 'GAL' },
+            { name: 'M88', ra: 12.53, dec: 14.42, type: 'GAL' },
+            { name: 'M89', ra: 12.59, dec: 12.56, type: 'GAL' },
+            { name: 'M90', ra: 12.61, dec: 13.16, type: 'GAL' },
+            { name: 'M91', ra: 12.59, dec: 14.50, type: 'GAL' },
+            { name: 'M92', ra: 17.28, dec: 43.14, type: 'GC' },
+            { name: 'M93', ra: 7.74, dec: -23.87, type: 'OC' },
+            { name: 'M94', ra: 12.85, dec: 41.12, type: 'GAL' },
+            { name: 'M95', ra: 10.74, dec: 11.70, type: 'GAL' },
+            { name: 'M96', ra: 10.77, dec: 11.82, type: 'GAL' },
+            { name: 'M97', ra: 11.24, dec: 55.02, type: 'PN' },
+            { name: 'M98', ra: 12.23, dec: 14.90, type: 'GAL' },
+            { name: 'M99', ra: 12.31, dec: 14.42, type: 'GAL' },
+            { name: 'M100', ra: 12.37, dec: 15.82, type: 'GAL' },
+            { name: 'M101', ra: 14.05, dec: 54.35, type: 'GAL' },
+            { name: 'M102', ra: 15.10, dec: 55.76, type: 'GAL' },
+            { name: 'M103', ra: 1.56, dec: 60.65, type: 'OC' },
+            { name: 'M104', ra: 12.67, dec: -11.62, type: 'GAL' },
+            { name: 'M105', ra: 10.79, dec: 12.58, type: 'GAL' },
+            { name: 'M106', ra: 12.32, dec: 47.30, type: 'GAL' },
+            { name: 'M107', ra: 16.54, dec: -13.05, type: 'GC' },
+            { name: 'M108', ra: 11.19, dec: 55.67, type: 'GAL' },
+            { name: 'M109', ra: 11.96, dec: 53.37, type: 'GAL' },
+            { name: 'M110', ra: 0.67, dec: 41.68, type: 'GAL' }
+        ];
+
+        function parseRA(raStr) {
+            var parts = raStr.split(':');
+            return parseFloat(parts[0]) + parseFloat(parts[1]) / 60 + parseFloat(parts[2]) / 3600;
+        }
+
+        function parseDEC(decStr) {
+            var sign = decStr[0] === '-' ? -1 : 1;
+            var parts = decStr.replace(/[+-]/, '').split(':');
+            return sign * (parseFloat(parts[0]) + parseFloat(parts[1]) / 60 + parseFloat(parts[2]) / 3600);
+        }
+
+        function raToHMS(raDecimal) {
+            var hours = Math.floor(raDecimal);
+            var minutes = Math.floor((raDecimal - hours) * 60);
+            var seconds = Math.floor(((raDecimal - hours) * 60 - minutes) * 60);
+            return ('0' + hours).slice(-2) + ':' + ('0' + minutes).slice(-2) + ':' + ('0' + seconds).slice(-2);
+        }
+
+        function decToDMS(decDecimal) {
+            var sign = decDecimal >= 0 ? '+' : '-';
+            var absVal = Math.abs(decDecimal);
+            var degrees = Math.floor(absVal);
+            var minutes = Math.floor((absVal - degrees) * 60);
+            var seconds = Math.floor(((absVal - degrees) * 60 - minutes) * 60);
+            return sign + ('0' + degrees).slice(-2) + ':' + ('0' + minutes).slice(-2) + ':' + ('0' + seconds).slice(-2);
+        }
+
+        function updatePosition() {
+            var apiUrl = apiUrlInput.value;
+            fetch(apiUrl + '/api/status')
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    if (data.status === 'success' && data.data) {
+                        telescopePos.ra = parseRA(data.data.ra);
+                        telescopePos.dec = parseDEC(data.data.dec);
+                        statusEl.textContent = 'Tracking: ' + (data.data.state || 'Unknown');
+                        statusEl.className = 'status connected';
+                        drawStarChart();
+                    }
+                })
+                .catch(function(error) {
+                    statusEl.textContent = 'Connection Error';
+                    statusEl.className = 'status disconnected';
+                });
+        }
+
+        function handleCanvasClick(event) {
+            var rect = canvas.getBoundingClientRect();
+            
+            // Calculate scale factors between display size and canvas logical size
+            var scaleX = canvas.width / rect.width;
+            var scaleY = canvas.height / rect.height;
+            
+            // Convert pixel coordinates to canvas coordinates
+            var x = (event.clientX - rect.left) * scaleX;
+            var y = (event.clientY - rect.top) * scaleY;
+            
+            // Convert canvas coordinates to RA/DEC
+            var width = canvas.width;
+            var height = canvas.height;
+            
+            // RA calculation (reversed: 24h on left, 0h on right)
+            selectedPos.ra = 24 - (x / width) * 24;
+            if (selectedPos.ra < 0) selectedPos.ra += 24;
+            if (selectedPos.ra >= 24) selectedPos.ra -= 24;
+            
+            // DEC calculation
+            selectedPos.dec = ((height - y) / height) * 180 - 90;
+            
+            // Update display
+            var raStr = raToHMS(selectedPos.ra);
+            var decStr = decToDMS(selectedPos.dec);
+            selectedCoordsEl.textContent = 'Selected: RA ' + raStr + '  DEC ' + decStr;
+            
+            // Enable GOTO button
+            gotoButton.disabled = false;
+            gotoButton.style.background = '#10b981';
+            gotoButton.style.cursor = 'pointer';
+            
+            // Redraw chart with selection marker
+            drawStarChart();
+        }
+
+        function executeGoto() {
+            if (selectedPos.ra === null || selectedPos.dec === null) {
+                return;
+            }
+            
+            var apiUrl = apiUrlInput.value;
+            var raStr = raToHMS(selectedPos.ra);
+            var decStr = decToDMS(selectedPos.dec);
+            
+            var url = apiUrl + '/api/goto?ra=' + encodeURIComponent(raStr) + '&dec=' + encodeURIComponent(decStr);
+            
+            fetch(url)
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    if (data.status === 'success') {
+                        selectedCoordsEl.textContent = 'GOTO command sent: RA ' + raStr + '  DEC ' + decStr;
+                        selectedCoordsEl.style.color = '#10b981';
+                        setTimeout(function() {
+                            selectedCoordsEl.style.color = '#60a5fa';
+                        }, 3000);
+                    } else {
+                        selectedCoordsEl.textContent = 'GOTO failed: ' + (data.message || 'Unknown error');
+                        selectedCoordsEl.style.color = '#ef4444';
+                    }
+                })
+                .catch(function(error) {
+                    selectedCoordsEl.textContent = 'GOTO error: ' + error.message;
+                    selectedCoordsEl.style.color = '#ef4444';
+                });
+        }
+
+        function drawStarChart() {
+            var width = canvas.width;
+            var height = canvas.height;
+
+            // Clear background
+            ctx.fillStyle = '#0a0e27';
+            ctx.fillRect(0, 0, width, height);
+
+            // Draw RA grid lines (reversed: 24h on left, 0h on right)
+            ctx.strokeStyle = '#1a2040';
+            ctx.lineWidth = 1;
+            for (var ra = 0; ra <= 24; ra += 2) {
+                var x = ((24 - ra) / 24) * width; // Reversed calculation
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, height);
+                ctx.stroke();
+                
+                ctx.fillStyle = '#4a5568';
+                ctx.font = '12px monospace';
+                ctx.fillText(ra + 'h', x + 3, 15);
+            }
+
+            // Draw DEC grid lines
+            for (var dec = -90; dec <= 90; dec += 30) {
+                var y = height - ((dec + 90) / 180) * height;
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
+                ctx.stroke();
+                
+                ctx.fillStyle = '#4a5568';
+                ctx.fillText(dec + '°', 5, y - 3);
+            }
+
+            // Draw celestial equator (DEC = 0)
+            ctx.strokeStyle = '#2d3748';
+            ctx.lineWidth = 2;
+            var equatorY = height - ((0 + 90) / 180) * height;
+            ctx.beginPath();
+            ctx.moveTo(0, equatorY);
+            ctx.lineTo(width, equatorY);
+            ctx.stroke();
+
+            // Draw stars
+            for (var i = 0; i < stars.length; i++) {
+                var star = stars[i];
+                var x = ((24 - star.ra) / 24) * width; // Reversed calculation
+                var y = height - ((star.dec + 90) / 180) * height;
+                var size = Math.max(2, 7 - star.mag);
+                
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(x, y, size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Show name for bright stars (mag < 1.5)
+                if (star.mag < 1.5) {
+                    ctx.fillStyle = '#a0aec0';
+                    ctx.font = '10px sans-serif';
+                    ctx.fillText(star.name, x + size + 3, y + 3);
+                }
+            }
+
+            // Draw Messier objects
+            for (var i = 0; i < messierObjects.length; i++) {
+                var obj = messierObjects[i];
+                var x = ((24 - obj.ra) / 24) * width; // Reversed calculation
+                var y = height - ((obj.dec + 90) / 180) * height;
+                
+                // Different colors by type
+                var color = '#10b981'; // Default green
+                if (obj.type === 'GAL') color = '#60a5fa'; // Blue for galaxies
+                else if (obj.type === 'NEB') color = '#f59e0b'; // Orange for nebulae
+                else if (obj.type === 'PN') color = '#ec4899'; // Pink for planetary nebulae
+                
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(x, y, 3, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Show name for famous Messier objects
+                var famousObjects = ['M31', 'M42', 'M45', 'M13', 'M51', 'M57', 'M1', 'M8'];
+                if (famousObjects.indexOf(obj.name) !== -1) {
+                    ctx.fillStyle = color;
+                    ctx.font = '9px sans-serif';
+                    ctx.fillText(obj.name, x + 5, y + 2);
+                }
+            }
+
+            // Draw telescope position
+            if (telescopePos.ra !== null && telescopePos.dec !== null) {
+                var x = ((24 - telescopePos.ra) / 24) * width; // Reversed calculation
+                var y = height - ((telescopePos.dec + 90) / 180) * height;
+                
+                // Draw X mark
+                ctx.strokeStyle = '#ef4444';
+                ctx.lineWidth = 3;
+                var size = 15;
+                
+                ctx.beginPath();
+                ctx.moveTo(x - size, y - size);
+                ctx.lineTo(x + size, y + size);
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(x + size, y - size);
+                ctx.lineTo(x - size, y + size);
+                ctx.stroke();
+                
+                // Draw circle around position
+                ctx.strokeStyle = '#ef4444';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(x, y, 20, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                // Display coordinates
+                ctx.fillStyle = '#ef4444';
+                ctx.font = 'bold 13px monospace';
+                var raH = Math.floor(telescopePos.ra);
+                var raM = Math.floor((telescopePos.ra % 1) * 60);
+                var raMStr = raM < 10 ? '0' + raM : '' + raM;
+                var raHMS = raH + ':' + raMStr;
+                var decSign = telescopePos.dec > 0 ? '+' : '';
+                var decDMS = decSign + telescopePos.dec.toFixed(1) + '°';
+                ctx.fillText('RA ' + raHMS + '  DEC ' + decDMS, x + 25, y - 25);
+            }
+
+            // Draw selected position marker
+            if (selectedPos.ra !== null && selectedPos.dec !== null) {
+                var x = ((24 - selectedPos.ra) / 24) * width; // Reversed calculation
+                var y = height - ((selectedPos.dec + 90) / 180) * height;
+                
+                // Draw blue circle
+                ctx.strokeStyle = '#60a5fa';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(x, y, 15, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                // Draw crosshair
+                ctx.strokeStyle = '#60a5fa';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(x - 10, y);
+                ctx.lineTo(x + 10, y);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(x, y - 10);
+                ctx.lineTo(x, y + 10);
+                ctx.stroke();
+            }
+        }
+
+        // Auto refresh toggle
+        autoRefreshCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                updateInterval = setInterval(updatePosition, 1000);
+            } else {
+                if (updateInterval) {
+                    clearInterval(updateInterval);
+                    updateInterval = null;
+                }
+            }
+        });
+
+        // Canvas click event
+        canvas.addEventListener('click', handleCanvasClick);
+
+        // Initialize
+        drawStarChart();
+        updatePosition();
+        updateInterval = setInterval(updatePosition, 1000);
+    </script>
+</body>
+</html>
