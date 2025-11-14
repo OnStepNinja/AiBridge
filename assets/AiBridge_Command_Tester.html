@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AiBridge LX200 Command Tester</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 30px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        /* Input Section */
+        .input-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            flex: 1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .command-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .command-prefix, .command-suffix {
+            font-size: 20px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-send {
+            background: #667eea;
+            color: white;
+            min-width: 120px;
+        }
+
+        .btn-send:hover {
+            background: #5568d3;
+        }
+
+        /* Response Comparison Section */
+        .response-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .response-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .response-box h3 {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .endpoint-tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .tag-legacy {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .tag-api {
+            background: #28a745;
+            color: white;
+        }
+
+        .response-content {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            min-height: 100px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .placeholder {
+            color: #666;
+        }
+
+        .success {
+            color: #4ec9b0;
+        }
+
+        .error {
+            color: #f48771;
+        }
+
+        /* Help Section */
+        .help {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .help h4 {
+            color: #1976D2;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .help ul {
+            margin-left: 20px;
+            color: #555;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .help code {
+            background: #fff;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+
+        .command-table {
+            margin-top: 10px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .command-table td {
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+
+        .command-table td:first-child {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+            background: #fff;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .response-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AiBridge LX200 Command Tester</h1>
+        <p class="subtitle">Compare two endpoint responses</p>
+
+        <!-- Input Section -->
+        <div class="input-section">
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="ipAddress">IP Address</label>
+                    <input type="text" id="ipAddress" value="192.168.4.1">
+                </div>
+            </div>
+
+            <div class="command-row">
+                <span class="command-prefix">:</span>
+                <input type="text" id="command" placeholder="Example: GR, GD, GA" value="GR">
+                <span class="command-suffix">#</span>
+                <button class="btn btn-send" onclick="sendBothCommands()">Send Both</button>
+            </div>
+        </div>
+
+        <!-- Response Comparison -->
+        <div class="response-section">
+            <!-- /command (text/plain) -->
+            <div class="response-box">
+                <h3>
+                    <span class="endpoint-tag tag-legacy">Legacy</span>
+                    /command
+                </h3>
+                <div class="response-content" id="response1">
+                    <span class="placeholder">Response will be displayed here</span>
+                </div>
+            </div>
+
+            <!-- /api/command (JSON) -->
+            <div class="response-box">
+                <h3>
+                    <span class="endpoint-tag tag-api">API</span>
+                    /api/command
+                </h3>
+                <div class="response-content" id="response2">
+                    <span class="placeholder">Response will be displayed here</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help -->
+        <div class="help">
+            <h4>💡 How to Use</h4>
+            <ul>
+                <li>Enter LX200 command body only (<code>:</code> and <code>#</code> are automatically added)</li>
+                <li>Click "Send Both" to send to both endpoints simultaneously</li>
+                <li>Press Enter key to send</li>
+            </ul>
+            
+            <h4 style="margin-top: 12px;">📌 Common OnStep / NS-5000 Commands</h4>
+            <table class="command-table">
+                <tr>
+                    <td>GR</td>
+                    <td>Get Right Ascension</td>
+                </tr>
+                <tr>
+                    <td>GD</td>
+                    <td>Get Declination</td>
+                </tr>
+                <tr>
+                    <td>GA</td>
+                    <td>Get Altitude</td>
+                </tr>
+                <tr>
+                    <td>GZ</td>
+                    <td>Get Azimuth</td>
+                </tr>
+                <tr>
+                    <td>GVP</td>
+                    <td>Get Firmware Name</td>
+                </tr>
+                <tr>
+                    <td>GVN</td>
+                    <td>Get Firmware Version</td>
+                </tr>
+                <tr>
+                    <td>=SD</td>
+                    <td>Beep</td>
+                </tr>
+                <tr>
+                    <td>=V</td>
+                    <td>DOG Version</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        async function sendBothCommands() {
+            const ip = document.getElementById('ipAddress').value;
+            const command = document.getElementById('command').value.trim();
+
+            if (!ip || !command) {
+                alert('Please enter IP address and command');
+                return;
+            }
+
+            const fullCommand = `:${command}#`;
+
+            // Clear both responses
+            document.getElementById('response1').innerHTML = '<span class="placeholder">Sending...</span>';
+            document.getElementById('response2').innerHTML = '<span class="placeholder">Sending...</span>';
+
+            // 1. Send to /command (text/plain)
+            await sendToLegacy(ip, command);
+
+            // 2. Wait a bit then send to /api/command (JSON)
+            await new Promise(resolve => setTimeout(resolve, 100));
+            await sendToApi(ip, command);
+        }
+
+        async function sendToLegacy(ip, command) {
+            try {
+                const url = `http://${ip}/command?cmd=${encodeURIComponent(command)}`;
+                const response = await fetch(url);
+                const data = await response.text();
+
+                const responseDiv = document.getElementById('response1');
+                if (data) {
+                    responseDiv.innerHTML = `<span class="success">${escapeHtml(data)}</span>`;
+                } else {
+                    responseDiv.innerHTML = '<span class="error">(Empty response)</span>';
+                }
+            } catch (error) {
+                const responseDiv = document.getElementById('response1');
+                responseDiv.innerHTML = `<span class="error">Error: ${escapeHtml(error.message)}</span>`;
+            }
+        }
+
+        async function sendToApi(ip, command) {
+            try {
+                const url = `http://${ip}/api/command?cmd=${encodeURIComponent(command)}`;
+                const response = await fetch(url);
+                const json = await response.json();
+
+                const responseDiv = document.getElementById('response2');
+                const formatted = JSON.stringify(json, null, 2);
+                
+                if (json.status === "success") {
+                    responseDiv.innerHTML = `<span class="success">${escapeHtml(formatted)}</span>`;
+                } else {
+                    responseDiv.innerHTML = `<span class="error">${escapeHtml(formatted)}</span>`;
+                }
+            } catch (error) {
+                const responseDiv = document.getElementById('response2');
+                responseDiv.innerHTML = `<span class="error">Error: ${escapeHtml(error.message)}</span>`;
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Send on Enter key
+        document.getElementById('command').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendBothCommands();
+            }
+        });
+    </script>
+</body>
+</html>
