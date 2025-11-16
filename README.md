@@ -215,6 +215,19 @@ Open browser → `http://[IP-ADDRESS]`
 
 ## Info & Updates
 
+**2024-11-16 AiBridge v7.13 - OnStep Stability Fix** 🎯
+**Major stability improvements for OnStep controllers. Essential update.**
+
+* **Fixed**: RA/DEC coordinate display issues with OnStep (incomplete/incorrect values)
+* **Fixed**: Serial communication timeout issues (30ms→100ms on command ports)
+* **Added**: Support for OnStep high-precision coordinate format (asterisk delimiter)
+* **Improved**: Buffer management and mutex timeouts for reliable communication
+
+**Root Cause**: OnStep's 50-100ms response time exceeded previous 30ms timeout, causing command conflicts.
+**Impact**: OnStep users experience dramatically improved stability. NS-5000 operation unaffected.
+**Priority**: High - Recommended for all OnStep users.
+
+
 2025-10-31 AiBridge v7.12.1 - Custom UI Restoration & Version Display 🚀
 Critical fix restoring Custom UI functionality. Custom HTML pages (index2.html, etc.) now load properly again.
 Control panel now shows version number automatically in the title (e.g. "AiBridge Console v7.12.1").
