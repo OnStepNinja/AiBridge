@@ -215,6 +215,15 @@ Open browser → `http://[IP-ADDRESS]`
 
 ## Info & Updates
 
+2026-01-16: ASCOM Remote Server Integration Proof
+Added two key assets to /assets/:
+AiBridge_System_Concept_2026-1-15.jpg: Complete system diagram illustrating AiBridge's role in connecting AiBrowser, Alt-Az/Weather sensors, ASCOM Drivers, and Remote Server stack for automated observatory control.
+AiBridge-to-ASCOM-Remote-Server-Integration.png: Live screenshot showing ASCOM/Alpaca telescope discovery in action, confirming AiBridge successfully detects and interfaces with simulators, OnStepNinja mounts, and ASCOM-compliant devices.​
+Development Note: AiSolverCam (imaging + plate solving), AiCamera, and AiFocuser are under active development for full integration. Your feedback on this ASCOM Remote Server connection verification is welcome to refine these workflows!
+Preparing further firmware and schematic details for OnStepNinja (OnStep+NS-5000) toward public release. Check the shared NotebookLM for detailed project notes and updates.
+https://notebooklm.google.com/notebook/ea637833-f81a-4391-8401-2dc56ee49a69
+
+
 **2024-11-16 AiBridge v7.13 - OnStep Stability Fix** 🎯
 **Major stability improvements for OnStep controllers. Essential update.**
 
