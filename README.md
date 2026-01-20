@@ -11,6 +11,8 @@
 
 **The first telescope interface designed for conversational AI control via Perplexity AI's Comet Browser.**
 
+![AiBridge System Concept](assets/AiBridge_System_Concept_2026-1-15.jpg)
+
 Simply talk to the AI - **in natural language, via text or voice** - and let the AI:
 
 - 🧠 **Understand** your intent ("Show me the Andromeda Galaxy")
