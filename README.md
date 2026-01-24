@@ -217,6 +217,8 @@ Open browser → `http://[IP-ADDRESS]`
 
 ## Info & Updates
 
+2026-01-24: The official AiBridge-compatible OnStepNinja GoTo system repository is being prepared for public release: https://github.com/OnStepNinja/OnStepNinja
+
 2026-01-16: ASCOM Remote Server Integration Proof
 Added two key assets to /assets/:
 AiBridge_System_Concept_2026-1-15.jpg: Complete system diagram illustrating AiBridge's role in connecting AiBrowser, Alt-Az/Weather sensors, ASCOM Drivers, and Remote Server stack for automated observatory control.
