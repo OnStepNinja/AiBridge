@@ -217,6 +217,16 @@ Open browser → `http://[IP-ADDRESS]`
 
 ## Info & Updates
 
+New Project: AiMCPserver - MCP Protocol Support for AI Agent Control
+Due to browser security policy changes in late 2025, AI agents (Comet Browser, etc.) can no longer directly access local network devices (192.168.x.x). This has disabled AI-powered telescope control via AiBridge.
+Solution: We are developing AiMCPserver, an ESP32-based server implementing the Model Context Protocol (MCP) - the new standard for AI agent integration.
+Key Features:
+📱 MCP Protocol - Claude Desktop, Antigravity support
+🔭 Alpaca Protocol - NINA, PHD2, astronomy software support
+📡 LX200 Protocol - SkySafari, legacy software support
+🔍 Alpaca Discovery - Automatic network device detection
+⚡ ESP32-based - Low cost, low power consumption
+
 2026-01-24: The official AiBridge-compatible OnStepNinja GoTo system repository is being prepared for public release: https://github.com/OnStepNinja/OnStepNinja
 
 2026-01-16: ASCOM Remote Server Integration Proof
