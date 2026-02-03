@@ -217,7 +217,7 @@ Open browser → `http://[IP-ADDRESS]`
 
 ## Info & Updates
 
-OnStep NS-3000 Release
+2026-02-3: OnStep NS-3000 Release
 The customized OnStep derivative **OnStep NS-3000**  
 (ESP32 firmware binaries and source code) is now available for free on BOOTH.
 This repository does not include the firmware itself.  
@@ -225,7 +225,7 @@ Please refer to the BOOTH page for binaries, source code, and schematics.
 https://onstepninja.booth.pm/items/7944168
 Note: OnStep NS-3000 is an independent derivative and is not an official OnStep release.
 
-New Project: AiMCPserver - MCP Protocol Support for AI Agent Control
+2026-02-1: New Project: AiMCPserver - MCP Protocol Support for AI Agent Control
 Due to browser security policy changes in late 2025, AI agents (Comet Browser, etc.) can no longer directly access local network devices (192.168.x.x). This has disabled AI-powered telescope control via AiBridge.
 Solution: We are developing AiMCPserver, an ESP32-based server implementing the Model Context Protocol (MCP) - the new standard for AI agent integration.
 Key Features:
