@@ -217,6 +217,16 @@ Open browser → `http://[IP-ADDRESS]`
 
 ## Info & Updates
 
+## 2026-02-7: 🔔 New: AiBridgeMCP – Direct AI Control via MCP (No Proxy Required)
+AiBridge now supports **AiBridgeMCP**, a lightweight standalone **MCP (Model Context Protocol) server running directly on ESP32**.
+With **direct SSE (Server-Sent Events) transport**, AI agents such as **Claude, Gemini, or ChatGPT** can connect directly to AiBridge over the local network, **without any PC-side proxy, Python, or Node.js runtime**.
+This enables **AI-to-hardware interaction** with telescope control systems via the **ASCOM Alpaca protocol**, making AiBridge an **AI-native telescope controller**.
+### Key points
+- **Standalone MCP server on ESP32**
+- **Direct SSE connection** (server → client) + **HTTP POST** (client → server)
+- **No proxy or intermediary software required**
+- **Compatible with Alpaca devices** (OnStepNinja, NS-5000, etc.)
+
 2026-02-3: OnStep NS-3000 Release
 The customized OnStep derivative **OnStep NS-3000**  
 (ESP32 firmware binaries and source code) is now available for free on BOOTH.
