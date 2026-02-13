@@ -217,6 +217,12 @@ Open browser → `http://[IP-ADDRESS]`
 
 ## Info & Updates
 
+2026-02-13: AiBridgeMCP Listed on MCP Market - World's First MCP Server on ESP32
+AiBridgeMCP has been featured on MCP Market as the world's first and only implementation of a Model Context Protocol (MCP) server running natively on an ESP32 microcontroller.
+
+This is a true standalone solution: No Raspberry Pi, no PC proxy—just a $5 board communicating directly with Claude over SSE to bridge AI agents and telescope hardware via ASCOM Alpaca.
+Please refer to the listing page for more details: https://mcpmarket.com/ja/server/aibridge
+
 ## 2026-02-7: 🔔 New: AiBridgeMCP – Direct AI Control via MCP (No Proxy Required)
 AiBridge now supports **AiBridgeMCP**, a lightweight standalone **MCP (Model Context Protocol) server running directly on ESP32**.
 With **direct SSE (Server-Sent Events) transport**, AI agents such as **Claude, Gemini, or ChatGPT** can connect directly to AiBridge over the local network, **without any PC-side proxy, Python, or Node.js runtime**.
