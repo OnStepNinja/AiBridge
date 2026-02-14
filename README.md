@@ -25,7 +25,8 @@ AiBridge is the core integration platform designed to connect existing astronomi
 AiBridgeMCP is a standalone Model Context Protocol implementation running entirely on the ESP32 microcontroller. It connects AI agents directly to AiBridge, ASCOM, Alpaca, and OnStepNinja systems.
 
 * **Repository:** [https://github.com/OnStepNinja/AiBridgeMCP](https://github.com/OnStepNinja/AiBridgeMCP)
-
+* **MCP Market:** [AiBridge Server Page](https://mcpmarket.com/ja/server/aibridge?utm_source=chatgpt.com)
+* 
 ### Development Background & The "Comet" Solution
 The development of AiBridgeMCP began as a practical solution to an unexpected limitation. **Due to tighter security restrictions in the Comet browser, direct local network access to the original AiBridge system became blocked.**
 
