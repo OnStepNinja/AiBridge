@@ -1,53 +1,65 @@
-# AiBridge
-# 🔭 AiBridge - Talk to Your Telescope
+# AI-Native Embedded Observatory Control
+### Bridging Legacy Hardware and Direct-to-Silicon AI Integration
 
-[![Version](https://img.shields.io/badge/version-7.10-blue.svg)] [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-
-**Control your OnStep mount through natural conversation with AI (Comet Browser)**
+This project represents a comprehensive ecosystem designed to connect astronomical control systems with Large Language Models (LLMs), evolving from a specific need to overcome modern browser security restrictions into a general-purpose AIoT solution.
 
 ---
 
-## 🌟 What is AiBridge?
+## 🧠 AiBridge
+**AI Interface Foundation for ASCOM / Alpaca / OnStepNinja Systems**
 
-**The first telescope interface designed for conversational AI control via Perplexity AI's Comet Browser.**
+AiBridge is the core integration platform designed to connect existing astronomical control systems with LLMs. By integrating ASCOM, Alpaca, and OnStepNinja environments, it enables intuitive natural-language control of astronomical equipment.
 
-![AiBridge System Concept](assets/AiBridge_System_Concept_2026-1-15.jpg)
+* **Repository:** [https://github.com/OnStepNinja/AiBridge](https://github.com/OnStepNinja/AiBridge)
 
-Simply talk to the AI - **in natural language, via text or voice** - and let the AI:
-
-- 🧠 **Understand** your intent ("Show me the Andromeda Galaxy")
-- 💭 **Reason** about coordinates, timing, and positioning
-- 🎯 **Execute** telescope commands automatically  
-- 🗣️ **Respond** with status updates in conversation
-
-**No manual coordinate entry. No complex commands. Just conversation.**
-
-### Current AI Platform Support
-
-**✅ Perplexity AI - Comet Browser** (Primary support)
-
-- Full local network access capability
-- Can directly call AiBridge REST API
-- Optimized for conversational telescope control
-- **Currently the only AI agent with local network access**
-
-**Platform**: ESP32 | **AI**: Comet Browser required for conversational control
+### Core Roles
+* Bridging LLMs with astronomical control hardware.
+* Seamless integration with ASCOM / Alpaca systems.
+* Serving as the central layer for AI-driven observatory automation.
 
 ---
 
-🎯 **How It Works**
+## 🔭 AiBridgeMCP
+**Native ESP32 Model Context Protocol (MCP) Server**
 
-You: "Point my telescope at Jupiter"
-  ↓
-  Comet AI (Thinks): "Jupiter is currently at RA 05:23:15, DEC +22:47:30"
-  ↓
-  Comet AI (Reasons): "I'll send a GOTO command to the telescope"
-  ↓
-  Comet AI (Executes): Sends GET request
-  GET /api/goto?ra=05:23:15&dec=+22:47:30
-  ↓
-  Comet AI (Responds): "Telescope is slewing to Jupiter."
+AiBridgeMCP is a standalone Model Context Protocol implementation running entirely on the ESP32 microcontroller. It connects AI agents directly to AiBridge, ASCOM, Alpaca, and OnStepNinja systems.
 
+* **Repository:** [https://github.com/OnStepNinja/AiBridgeMCP](https://github.com/OnStepNinja/AiBridgeMCP)
+
+### Development Background & The "Comet" Solution
+The development of AiBridgeMCP began as a practical solution to an unexpected limitation. **Due to tighter security restrictions in the Comet browser, direct local network access to the original AiBridge system became blocked.**
+
+To resolve this connectivity issue, I developed this MCP server as an alternative pathway. What started as a workaround to bridge AI models with hardware evolved into a standalone infrastructure. By running the MCP server natively on an ESP32, we eliminate the need for a proxy PC, allowing the system to bypass browser restrictions and communicate directly via SSE (Server-Sent Events).
+
+### Key Features
+* **Browser-Independent:** Overcomes local network access restrictions (e.g., Comet browser blocks) by using the standardized Model Context Protocol.
+* **Standalone Operation:** Runs entirely on a single ESP32 microcontroller without a host PC.
+* **Direct AI Control:** Enables agents like Claude, ChatGPT, or Gemini to interpret commands (e.g., "Capture M31", "Track Jupiter") and control hardware directly.
+* **Expandable:** While built for astronomy, this architecture serves as a foundation for general IoT and industrial AI applications.
+
+---
+
+## ⚙️ OnStepNinja
+**Hybrid Automatic GOTO Control System**
+
+A high-precision automatic GOTO control system combining the strengths of OnStep and NS-5000 technologies. OnStepNinja transforms conventional equatorial mounts into AI-native observatory systems.
+
+* **Repository:** [https://github.com/OnStepNinja/OnStepNinja](https://github.com/OnStepNinja/OnStepNinja)
+* **Official Release:** [https://onstepninja.booth.pm/items/7944168](https://onstepninja.booth.pm/items/7944168)
+
+### Key Features
+* **Hybrid Architecture:** Combines OnStep NS-3000 (Optimized for AI) + NS-5000.
+* **High-Precision Control:** Advanced stepper motor management.
+* **Integrated Plate Solving:** Native support for precise positioning.
+* **License:** Released under the GNU General Public License v3 (GPLv3).
+
+---
+
+## 🚀 Future Outlook: Beyond Astronomy
+
+While currently focused on ASCOM and Alpaca applications, **AiBridgeMCP** represents an emerging foundational technology. Implementing an MCP server on a microcontroller proves that this is not merely a niche solution for astronomy, but a core infrastructure layer for AI-integrated systems.
+
+We view this as an opportunity to expand the concept globally, applying this "Direct-to-Silicon" AI control to IoT, robotics, and industrial automation fields.
 ---
 
 ## ✨ Key Features
@@ -366,7 +378,6 @@ Special thanks to:
 
 - **OnStep Team** - For the excellent telescope control firmware
 - **ASCOM Initiative** - For the Alpaca protocol
-- **Perplexity AI** - For Comet Browser's local network capabilities
 - **ESP32 Community** - For Arduino core and libraries
 
 ---
