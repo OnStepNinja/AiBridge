@@ -58,6 +58,7 @@ A high-precision automatic GOTO control system combining the strengths of OnStep
 ## 🚀 Future Outlook: Beyond Astronomy
 
 While currently focused on ASCOM and Alpaca applications, **AiBridgeMCP** represents an emerging foundational technology. Implementing an MCP server on a microcontroller proves that this is not merely a niche solution for astronomy, but a core infrastructure layer for AI-integrated systems.
+[AiBridge on MCP Market](https://mcpmarket.com/ja/server/aibridge?utm_source=chatgpt.com)
 
 We view this as an opportunity to expand the concept globally, applying this "Direct-to-Silicon" AI control to IoT, robotics, and industrial automation fields.
 ---
