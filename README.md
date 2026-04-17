@@ -17,7 +17,7 @@ AiBridge is the core integration platform designed to connect existing astronomi
 * Seamless integration with ASCOM / Alpaca systems.
 * Serving as the central layer for AI-driven observatory automation.
 
-![LUNA Observatory System v5.9.5](assets/LUNA%20Observatory%20System%20v5.9.5b.png)
+![LUNA Observatory System v5.9.6](assets/LUNA%20Observatory%20System%20v5.9.6.png)
 
 ---
 
